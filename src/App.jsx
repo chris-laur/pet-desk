@@ -10,15 +10,22 @@ import ImageNone from './images/no-image.jpg';
 import axios from 'axios';
 
 import { useState, useEffect } from 'react';
-import { Button, Card, Row, Col, Container, ButtonToolbar } from 'react-bootstrap';
+import { Button, Card, Row, Col, Container, ButtonToolbar, Dropdown, ButtonGroup } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faCloudArrowUp } from '@fortawesome/free-solid-svg-icons';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { DateTimePicker } from 'react-datetime-picker';
 
 function App() {
     const petImages = [ImageLila, ImageMushka, ImageEva];
     const requestStatuses = ['No Action Taken', 'Confirmed', 'New Date Suggested'];
+    const sortOptions = [
+        'Date Ascending',
+        'Date Descending',
+        'Appointment Type Ascending',
+        'Appointment Type Descending',
+    ];
     const [appointmentChangeRequests, setData] = useState([]);
+    const [selectedFilter, setSelectedFilter] = useState(-1);
 
     function setNewAppointmentDate(selectedDate, request) {
         request.newAppointmentDate = selectedDate;
@@ -53,9 +60,60 @@ function App() {
     }
 
     function updateRequest(requestToUpdate) {
+        if (!requestToUpdate.newAppointmentDate) {
+            alert('Date is required.');
+            return;
+        }
         requestToUpdate.status = requestStatuses[2];
         requestToUpdate.requestedDateTimeOffset = requestToUpdate.newAppointmentDate;
         setData([...appointmentChangeRequests]);
+    }
+
+    function isValidRequestDate(request) {
+        return new Date(request.requestedDateTimeOffset) >= new Date();
+    }
+
+    function filterChange(newFilter) {
+        setSelectedFilter(newFilter);
+        setData([...appointmentChangeRequests]);
+    }
+
+    function getFilteredData() {
+        if (selectedFilter >= 0) {
+            return appointmentChangeRequests.filter((request) => request.status == requestStatuses[selectedFilter]);
+        }
+        return appointmentChangeRequests;
+    }
+
+    function sortChange(eventKey) {
+        if (eventKey == 0) {
+            setData(
+                [...appointmentChangeRequests].sort(
+                    (obj1, obj2) => new Date(obj1.requestedDateTimeOffset) - new Date(obj2.requestedDateTimeOffset)
+                )
+            );
+        }
+        if (eventKey == 1) {
+            setData(
+                [...appointmentChangeRequests].sort(
+                    (obj1, obj2) => new Date(obj2.requestedDateTimeOffset) - new Date(obj1.requestedDateTimeOffset)
+                )
+            );
+        }
+        if (eventKey == 2) {
+            setData(
+                [...appointmentChangeRequests].sort((obj1, obj2) =>
+                    obj1.appointmentType > obj2.appointmentType ? 1 : -1
+                )
+            );
+        }
+        if (eventKey == 3) {
+            setData(
+                [...appointmentChangeRequests].sort((obj1, obj2) =>
+                    obj1.appointmentType > obj2.appointmentType ? -1 : 1
+                )
+            );
+        }
     }
 
     useEffect(() => {
@@ -72,17 +130,57 @@ function App() {
     return (
         <>
             <Container fluid style={{ padding: '20px' }}>
-                <Row style={{ padding: '20px' }}>
-                    <h3>PetDesk Appointment Change Requests</h3>
-                </Row>
-                <Row className="g-4">
-                    {appointmentChangeRequests.map((request) => (
+                <h3 style={{ paddingTop: '20px', paddingBottom: '20px' }}>PetDesk Appointment Change Requests</h3>
+
+                <Dropdown
+                    onSelect={(eventKey) => sortChange(eventKey)}
+                    style={{ display: 'inline', marginRight: '20px' }}
+                >
+                    <Dropdown.Toggle style={{ borderColor: '#0BC98C', backgroundColor: '#0BC98C' }}>
+                        Sort By
+                    </Dropdown.Toggle>
+
+                    <Dropdown.Menu>
+                        {sortOptions.map((sort, index) => (
+                            <Dropdown.Item key={index} eventKey={index}>
+                                {sort}
+                            </Dropdown.Item>
+                        ))}
+                    </Dropdown.Menu>
+                </Dropdown>
+
+                <ButtonGroup>
+                    <Button
+                        active={true}
+                        // style={{ borderColor: '#0BC98C', backgroundColor: '#0BC98C' }}
+                        onClick={() => filterChange(-1)}
+                    >
+                        All
+                    </Button>
+                    {requestStatuses.map((status, index) => (
+                        <Button
+                            key={index}
+                            // style={{ borderColor: '#0BC98C', backgroundColor: '#0BC98C' }}
+                            onClick={() => filterChange(index)}
+                        >
+                            {status}
+                        </Button>
+                    ))}
+                </ButtonGroup>
+
+                <Row className="g-4 mt-3">
+                    {getFilteredData().map((request) => (
                         <Col key={request.appointmentId}>
                             <Card
-                                style={{ width: '28rem', alignItems: 'center', paddingTop: '10px', borderWidth: '2px' }}
-                                border={request.status == requestStatuses[0] ? 'primary' : 'secondary'}
-                                bg={request.status == requestStatuses[0] ? 'info' : 'light'}
-                                text={request.status == requestStatuses[0] ? 'white' : 'dark'}
+                                style={{
+                                    width: '26rem',
+                                    height: '24rem',
+                                    alignItems: 'center',
+                                    paddingTop: '10px',
+                                    borderWidth: '2px',
+                                    backgroundColor: request.status == requestStatuses[0] ? '#F2E4FF' : '#D6EEF5',
+                                    borderColor: request.status == requestStatuses[0] ? '#BA77FF' : '#08A9C6',
+                                }}
                             >
                                 <Card.Img
                                     variant="top"
@@ -104,26 +202,39 @@ function App() {
                                         <br></br>
                                         <span
                                             style={{
-                                                fontStyle: request.status == requestStatuses[2] ? 'italic' : 'normal',
+                                                fontStyle:
+                                                    request.status == requestStatuses[2] || !isValidRequestDate(request)
+                                                        ? 'italic'
+                                                        : 'normal',
                                                 fontWeight: 'bold',
-                                                color: request.status == requestStatuses[2] ? 'red' : '',
+                                                color:
+                                                    request.status == requestStatuses[2]
+                                                        ? '#BA77FF'
+                                                        : !isValidRequestDate(request)
+                                                        ? '#F9629C'
+                                                        : '',
                                             }}
                                         >
                                             {new Date(Date.parse(request.requestedDateTimeOffset)).toLocaleString()}
                                         </span>
                                     </Card.Text>
-
+                                </Card.Body>
+                                <Card.Footer className="AppointmentCardFooter">
                                     <ButtonToolbar
                                         style={{
                                             visibility: request.status == requestStatuses[0] ? 'visible' : 'hidden',
+                                            flexWrap: 'nowrap',
                                         }}
                                     >
                                         <Button
-                                            variant="success"
                                             onClick={() => confirmRequest(request)}
                                             title="Confirm Request"
                                             style={{
                                                 marginRight: '10px',
+                                                backgroundColor: '#BA77FF',
+                                                borderColor: '#BA77FF',
+                                                display: isValidRequestDate(request) ? 'block' : 'none',
+                                                whiteSpace: 'nowrap',
                                             }}
                                         >
                                             <FontAwesomeIcon icon={faCheck} /> Confirm
@@ -136,20 +247,21 @@ function App() {
                                             required={true}
                                             disableClock={true}
                                             onChange={(selectedDate) => setNewAppointmentDate(selectedDate, request)}
-                                            className="PetDeskDateTimePicker"
+                                            className="AppointmentCardDateTimePicker"
                                         />
                                         <Button
-                                            variant="primary"
                                             onClick={() => updateRequest(request)}
                                             title="Update Appointment Date"
                                             style={{
                                                 marginLeft: '10px',
+                                                backgroundColor: '#08A9C6',
+                                                borderColor: '#08A9C6',
                                             }}
                                         >
-                                            <FontAwesomeIcon icon={faCloudArrowUp} /> Update
+                                            Update
                                         </Button>
                                     </ButtonToolbar>
-                                </Card.Body>
+                                </Card.Footer>
                             </Card>
                         </Col>
                     ))}

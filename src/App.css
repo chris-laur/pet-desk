@@ -4,7 +4,30 @@
   text-align: center;
 }
 
-.PetDeskDateTimePicker {
+.AppointmentCardDateTimePicker {
   color: #000;
   background-color: #fff;
+  border: none;
+  border-radius: 6px;
+}
+
+.AppointmentCardDateTimePicker > div {
+  border: none;
+}
+
+.AppointmentCardFooter {
+  border: none;
+  background: none;
+}
+
+.btn.btn-primary {
+  border-color: #0BC98C;
+  background-color: #fff;
+  color: #000;
+}
+
+.btn.btn-primary.active {
+  border-color: #0BC98C;
+  background-color: #0BC98C;
+  color: #fff;
 }
