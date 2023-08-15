@@ -1,5 +1,9 @@
 # PetDesk Sample Project
 
+## Demo
+
+[Hosted Demo](https://chris-laur.github.io/pet-desk/)
+
 ## How to run
 
 Currently, two official plugins are available:
