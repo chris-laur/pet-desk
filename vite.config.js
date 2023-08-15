@@ -8,7 +8,7 @@ export default defineConfig({
   // server: {
   //   proxy: {
   //     '/api': {
-  //       target: 'https://petdeskapi2.azurewebsites.net',
+  //       target: 'https://localhost:7275',
   //       changeOrigin: true,
   //       secure: false,
   //     }

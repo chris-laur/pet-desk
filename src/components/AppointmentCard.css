@@ -1,0 +1,65 @@
+
+.AppointmentCard {
+    width: 26rem;
+    height: 24rem;
+    align-items: center;
+    padding-top: 10px;
+    border-width: 2px;
+    margin: 14px;
+}
+
+.AppointmentCardDefault {
+    background-color: #F2E4FF;
+    border-color: #BA77FF;
+}
+
+.AppointmentCardActionTaken {
+    background-color: #D6EEF5;
+    border-color: #08A9C6;
+}
+
+.AppointmentCardDateTimePicker {
+    color: #000;
+    background-color: #fff;
+    border: none;
+    border-radius: 6px;
+    margin-left: 4px;
+    margin-right: 4px;
+    width: 200px;
+  }
+  
+  .AppointmentCardDateTimePicker > div {
+    border: none;
+  }
+  
+  .AppointmentCardFooter {
+    border: none;
+    background: none;
+    flex-wrap: nowrap;
+  }
+
+  .AppointmentCardFooter > div {
+    flex-wrap: nowrap;
+  }
+
+  .AppointmentCardImage {
+    border-radius: 50%;
+    width: 160px;
+    height: 160px;
+  }
+
+  .AppointmentCardButton {
+    white-space: nowrap;
+  }
+
+  .AppointmentCardHidden {
+    display: none;
+  }
+
+  .AppointmentCardRequestDate {
+    font-weight: bold;
+  }
+
+  .AppointmentCardInvalid {
+    color: #F9629C;
+  }
