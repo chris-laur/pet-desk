@@ -9,20 +9,21 @@ import ImageEva from './images/eva.jpg';
 import ImageNone from './images/no-image.jpg';
 import axios from 'axios';
 
-import { useState, useEffect, createContext } from 'react';
+import { useState, useEffect } from 'react';
 import { Button, Row, Container, Dropdown, ButtonGroup } from 'react-bootstrap';
 import { AppointmentCard } from './components/AppointmentCard';
+import { requestStatuses } from './components/constants';
+// future enhancement:
+// add toggle button to view requests in table with sorting (more compact view)
 
-// todo: add toggle button to view requests in table with sorting (more compact view)
-
-export const Context = createContext({
-    appointmentChangeRequests: [],
-    setData: () => {},
-});
+// export const Context = createContext({
+//     appointmentChangeRequests: [],
+//     setData: () => {},
+// });
 
 export function App() {
     const petImages = [ImageLila, ImageMushka, ImageEva];
-    const requestStatuses = ['No Action Taken', 'Confirmed', 'New Date Suggested'];
+
     const sortOptions = [
         'Date Ascending',
         'Date Descending',
@@ -123,11 +124,16 @@ export function App() {
                     </ButtonGroup>
                 </Row>
                 <Row className="mt-3 d-flex justify-content-center">
-                    <Context.Provider value={{ appointmentChangeRequests, setData, requestStatuses }}>
-                        {getFilteredData().map((request) => (
-                            <AppointmentCard key={request.appointmentId} request={request} />
-                        ))}
-                    </Context.Provider>
+                    {/* <Context.Provider value={{ appointmentChangeRequests, setData, requestStatuses }}> */}
+                    {getFilteredData().map((request) => (
+                        <AppointmentCard
+                            key={request.appointmentId}
+                            request={request}
+                            appointmentChangeRequests={appointmentChangeRequests}
+                            setData={setData}
+                        />
+                    ))}
+                    {/* </Context.Provider> */}
                 </Row>
             </Container>
         </>

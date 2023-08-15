@@ -4,15 +4,16 @@ import 'react-datetime-picker/dist/DateTimePicker.css';
 import 'react-calendar/dist/Calendar.css';
 import 'react-clock/dist/Clock.css';
 
-import { useContext } from 'react';
+//import { useContext } from 'react';
 import { Button, Card, ButtonToolbar } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { DateTimePicker } from 'react-datetime-picker';
-import { Context } from '../App';
+//import { Context } from '../App';
+import { requestStatuses } from './constants';
 
-export function AppointmentCard({ request }) {
-    const { appointmentChangeRequests, setData, requestStatuses } = useContext(Context);
+export function AppointmentCard({ request, appointmentChangeRequests, setData }) {
+    //const { appointmentChangeRequests, setData, requestStatuses } = useContext(Context);
 
     function setNewAppointmentDate(selectedDate, request) {
         request.newAppointmentDate = selectedDate;
