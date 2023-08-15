@@ -117,7 +117,7 @@ function App() {
     }
 
     useEffect(() => {
-        axios.get('/api/appointmentchangerequests').then(({ data }) => {
+        axios.get('https://petdeskapi2.azurewebsites.net/api/appointmentchangerequests').then(({ data }) => {
             setData(
                 data.map((request, index) => {
                     const image = index <= 2 ? petImages[index] : ImageNone;
@@ -150,19 +150,11 @@ function App() {
                 </Dropdown>
 
                 <ButtonGroup>
-                    <Button
-                        active={true}
-                        // style={{ borderColor: '#0BC98C', backgroundColor: '#0BC98C' }}
-                        onClick={() => filterChange(-1)}
-                    >
+                    <Button active={true} onClick={() => filterChange(-1)}>
                         All
                     </Button>
                     {requestStatuses.map((status, index) => (
-                        <Button
-                            key={index}
-                            // style={{ borderColor: '#0BC98C', backgroundColor: '#0BC98C' }}
-                            onClick={() => filterChange(index)}
-                        >
+                        <Button key={index} onClick={() => filterChange(index)}>
                             {status}
                         </Button>
                     ))}

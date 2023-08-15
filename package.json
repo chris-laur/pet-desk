@@ -1,5 +1,5 @@
 {
-  "homepage": "http://chris-laur.github.io/pet-desk",
+  "homepage": "https://chris-laur.github.io/pet-desk",
   "name": "pet-desk",
   "private": true,
   "version": "0.0.0",
@@ -11,7 +11,7 @@
     "preview": "vite preview",
     "start": "vite --open",
     "predeploy": "yarn build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.4.2",
