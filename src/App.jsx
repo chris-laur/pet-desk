@@ -21,7 +21,7 @@ import { getAppointmentChangeRequestData } from './services/data';
 // pretty message when filtering and no results
 
 export function App() {
-    const petImages = { 54831: ImageLila, 114673: ImageMushka, 90265: ImageEva };
+    const petImages = { 40524: ImageLila, 46889: ImageMushka, 113851: ImageEva };
     const [appointmentChangeRequests, setData] = useState([]);
     const [selectedFilter, setSelectedFilter] = useState(-1);
 
@@ -51,7 +51,7 @@ export function App() {
                         })
                         .sort(
                             (obj1, obj2) =>
-                                new Date(obj1.requestedDateTimeOffset) - new Date(obj2.requestedDateTimeOffset)
+                                new Date(obj2.requestedDateTimeOffset) - new Date(obj1.requestedDateTimeOffset)
                         )
                 );
             })

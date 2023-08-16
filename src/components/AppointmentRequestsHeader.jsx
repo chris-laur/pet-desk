@@ -9,7 +9,7 @@ import { Button, Dropdown, ButtonGroup } from 'react-bootstrap';
 import { requestStatuses, sortOptions } from './constants';
 
 export function AppointmentRequestsHeader({ appointmentChangeRequests, setData, selectedFilter, setSelectedFilter }) {
-    const [sortedBy, setSortedBy] = useState(sortOptions[0]);
+    const [sortedBy, setSortedBy] = useState(sortOptions[1]);
 
     function filterChange(newFilter) {
         setSelectedFilter(newFilter);
