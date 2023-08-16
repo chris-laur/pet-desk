@@ -7,34 +7,26 @@ import ImageLila from './images/lila.jpg';
 import ImageMushka from './images/mushka.jpg';
 import ImageEva from './images/eva.jpg';
 import ImageNone from './images/no-image.jpg';
-import axios from 'axios';
 
 import { useState, useEffect } from 'react';
 import { Row, Container } from 'react-bootstrap';
 import { AppointmentCard } from './components/AppointmentCard';
 import { AppointmentRequestsHeader } from './components/AppointmentRequestsHeader.jsx';
 import { requestStatuses } from './components/constants';
+import { getAppointmentChangeRequestData } from './services/data';
 
 // future enhancements:
 // add toggle button to view requests in table with sorting (more compact view)
 // loading progress indicator while getting data
 // pretty message when filtering and no results
 
-const API_URL = import.meta.env.DEV ? '/api' : 'https://petdeskapi2.azurewebsites.net/api';
-
 export function App() {
-    const petImages = [ImageLila, ImageMushka, ImageEva];
+    const petImages = { 54831: ImageLila, 114673: ImageMushka, 90265: ImageEva };
     const [appointmentChangeRequests, setData] = useState([]);
     const [selectedFilter, setSelectedFilter] = useState(-1);
 
-    function saveChanges(request) {
-        axios
-            .put(API_URL + '/updateappointmentchangerequest/' + request.appointmentId, {
-                status: request.status,
-                requestedDateTimeOffset: request.requestedDateTimeOffset,
-            })
-            .then((response) => console.log(response))
-            .catch((error) => console.log(error));
+    function getPetImage(userId) {
+        return petImages[userId] || ImageNone;
     }
 
     function getFilteredData() {
@@ -45,19 +37,22 @@ export function App() {
     }
 
     useEffect(() => {
-        axios
-            .get(API_URL + '/appointmentchangerequests')
+        getAppointmentChangeRequestData()
             .then(({ data }) => {
                 setData(
-                    data.map((request, index) => {
-                        const image = index <= 2 ? petImages[index] : ImageNone;
-                        return {
-                            ...request,
-                            status: request.status || requestStatuses[0],
-                            image: image,
-                            newAppointmentDate: new Date(),
-                        };
-                    })
+                    data
+                        .map((request) => {
+                            return {
+                                ...request,
+                                status: request.status || requestStatuses[0],
+                                image: getPetImage(request.userId),
+                                newAppointmentDate: null,
+                            };
+                        })
+                        .sort(
+                            (obj1, obj2) =>
+                                new Date(obj1.requestedDateTimeOffset) - new Date(obj2.requestedDateTimeOffset)
+                        )
                 );
             })
             .catch(function (error) {
@@ -87,7 +82,6 @@ export function App() {
                             request={request}
                             appointmentChangeRequests={appointmentChangeRequests}
                             setData={setData}
-                            saveChanges={saveChanges}
                         />
                     ))}
                 </Row>

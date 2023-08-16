@@ -9,15 +9,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { DateTimePicker } from 'react-datetime-picker';
 import { requestStatuses } from './constants';
+import { saveAppointmentChangeRequestData } from '../services/data';
 
-export function AppointmentCard({ request, appointmentChangeRequests, setData, saveChanges }) {
+export function AppointmentCard({ request, appointmentChangeRequests, setData }) {
     function setNewAppointmentDate(selectedDate, request) {
         request.newAppointmentDate = selectedDate;
         setData([...appointmentChangeRequests]);
     }
 
     function getPetDetails(pet) {
-        let details = [];
+        const details = [];
 
         if (pet) {
             if (pet.firstName) {
@@ -31,17 +32,19 @@ export function AppointmentCard({ request, appointmentChangeRequests, setData, s
             }
         }
 
-        if (details.length) {
-            return details.join(', ');
-        }
+        return details.join(', ');
+    }
 
-        return '';
+    function saveChanges(requestToUpdate) {
+        saveAppointmentChangeRequestData(requestToUpdate)
+            .then((response) => console.log(response))
+            .catch((error) => console.log(error));
+        setData([...appointmentChangeRequests]);
     }
 
     function confirmRequest(requestToUpdate) {
         requestToUpdate.status = requestStatuses[1];
         saveChanges(requestToUpdate);
-        setData([...appointmentChangeRequests]);
     }
 
     function updateRequest(requestToUpdate) {
@@ -52,7 +55,6 @@ export function AppointmentCard({ request, appointmentChangeRequests, setData, s
         requestToUpdate.status = requestStatuses[2];
         requestToUpdate.requestedDateTimeOffset = requestToUpdate.newAppointmentDate;
         saveChanges(requestToUpdate);
-        setData([...appointmentChangeRequests]);
     }
 
     function isValidRequestDate(requestDate) {
@@ -106,7 +108,6 @@ export function AppointmentCard({ request, appointmentChangeRequests, setData, s
                             clearIcon={null}
                             minDate={new Date()}
                             value={request.newAppointmentDate}
-                            required={true}
                             disableClock={true}
                             onChange={(selectedDate) => setNewAppointmentDate(selectedDate, request)}
                             className="AppointmentCardDateTimePicker"

@@ -9,7 +9,7 @@ import { Button, Dropdown, ButtonGroup } from 'react-bootstrap';
 import { requestStatuses, sortOptions } from './constants';
 
 export function AppointmentRequestsHeader({ appointmentChangeRequests, setData, selectedFilter, setSelectedFilter }) {
-    const [sortedBy, setSortedBy] = useState('');
+    const [sortedBy, setSortedBy] = useState(sortOptions[0]);
 
     function filterChange(newFilter) {
         setSelectedFilter(newFilter);
@@ -19,6 +19,7 @@ export function AppointmentRequestsHeader({ appointmentChangeRequests, setData, 
     function sortChange(eventKey) {
         setSortedBy(sortOptions[eventKey]);
 
+        // appointment date asc
         if (eventKey == 0) {
             setData(
                 [...appointmentChangeRequests].sort(
@@ -26,6 +27,7 @@ export function AppointmentRequestsHeader({ appointmentChangeRequests, setData, 
                 )
             );
         }
+        // appointment date desc
         if (eventKey == 1) {
             setData(
                 [...appointmentChangeRequests].sort(
@@ -33,6 +35,7 @@ export function AppointmentRequestsHeader({ appointmentChangeRequests, setData, 
                 )
             );
         }
+        // appointment type asc
         if (eventKey == 2) {
             setData(
                 [...appointmentChangeRequests].sort((obj1, obj2) =>
@@ -40,6 +43,7 @@ export function AppointmentRequestsHeader({ appointmentChangeRequests, setData, 
                 )
             );
         }
+        // appointment type desc
         if (eventKey == 3) {
             setData(
                 [...appointmentChangeRequests].sort((obj1, obj2) =>
