@@ -6,6 +6,8 @@
 
 You can see the app in action using the Demo link above. The client is hosted on GitHub Pages and the API is hosted on Azure.
 
+\*Note: might take a second to wake up the hosted API and get the data on initial load.
+
 ## How to run
 
 Instructions are based on using VS Code.
@@ -29,6 +31,8 @@ To run the app locally:
 The API is a .NET Core minimal Web API written in C#.
 
 The API repo is located [here](https://github.com/chris-laur/pet-desk-api).
+
+The API is hosted [here](https://petdeskapi2.azurewebsites.net).
 
 To run the app locally:
 
