@@ -4,17 +4,13 @@ import 'react-datetime-picker/dist/DateTimePicker.css';
 import 'react-calendar/dist/Calendar.css';
 import 'react-clock/dist/Clock.css';
 
-//import { useContext } from 'react';
 import { Button, Card, ButtonToolbar } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { DateTimePicker } from 'react-datetime-picker';
-//import { Context } from '../App';
 import { requestStatuses } from './constants';
 
-export function AppointmentCard({ request, appointmentChangeRequests, setData }) {
-    //const { appointmentChangeRequests, setData, requestStatuses } = useContext(Context);
-
+export function AppointmentCard({ request, appointmentChangeRequests, setData, saveChanges }) {
     function setNewAppointmentDate(selectedDate, request) {
         request.newAppointmentDate = selectedDate;
         setData([...appointmentChangeRequests]);
@@ -44,6 +40,7 @@ export function AppointmentCard({ request, appointmentChangeRequests, setData })
 
     function confirmRequest(requestToUpdate) {
         requestToUpdate.status = requestStatuses[1];
+        saveChanges(requestToUpdate);
         setData([...appointmentChangeRequests]);
     }
 
@@ -54,6 +51,7 @@ export function AppointmentCard({ request, appointmentChangeRequests, setData })
         }
         requestToUpdate.status = requestStatuses[2];
         requestToUpdate.requestedDateTimeOffset = requestToUpdate.newAppointmentDate;
+        saveChanges(requestToUpdate);
         setData([...appointmentChangeRequests]);
     }
 

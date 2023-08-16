@@ -10,33 +10,25 @@ Light gray blue D6EEF5
 */
 
 #root {
-  margin: 0;
-  padding: 0;
-  text-align: center;
+    margin: 0;
+    padding: 0;
+    text-align: center;
 }
 
 .App {
-  padding-left: 40px;
+    padding-left: 40px;
 }
 
 .btn.btn-primary {
-  border-color: #30E6AC;
-  background-color: #30E6AC;
-  color: #fff;
+    border-color: #30e6ac;
+    background-color: #30e6ac;
+    color: #fff;
 }
 
-.btn.btn-primary:hover, .btn-primary:focus, .btn-primary.active {
-  border-color: #0BC98C;
-  background-color: #0BC98C;
-  color: #fff;
-} 
-
-.AppointmentRequestsSort {
-  display: inline;
-  width: fit-content;
-}
-
-.AppointmentRequestsFilter {
-  display: inline;
-  width: fit-content;
+.btn.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary.active {
+    border-color: #0bc98c;
+    background-color: #0bc98c;
+    color: #fff;
 }

@@ -2,11 +2,38 @@
 
 ## Demo
 
-[Hosted Demo](https://chris-laur.github.io/pet-desk/)
+[Demo](https://chris-laur.github.io/pet-desk/)
+
+You can see the app in action using the Demo link above. The client is hosted on GitHub Pages and the API is hosted on Azure.
 
 ## How to run
 
-Currently, two official plugins are available:
+Instructions are based on using VS Code.
 
--   [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
--   [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Client
+
+The client is a React app. [Vite](https://vitejs.dev/guide/) was used to get it off the ground.
+
+The client repo is located [here](https://github.com/chris-laur/pet-desk).
+
+To run the app locally:
+
+-   Pull the code down from the repo
+-   Open the folder containing the code in VS Code
+-   Type 'yarn start' in the VS Code Terminal
+
+\*Note: you won't see any data loaded until you run the API locally.
+
+### API
+
+The API is a .NET Core minimal Web API written in C#.
+
+The API repo is located [here](https://github.com/chris-laur/pet-desk-api).
+
+To run the app locally:
+
+-   Pull the code down from the repo
+-   Open the folder containing the code in VS Code
+-   Type Ctrl+F5
+
+\*Note: you won't see anything on the root path when the app is launched in the browser but if you have started the client app you can now refresh it and see the data fetched from the API.

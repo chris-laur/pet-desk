@@ -10,32 +10,31 @@ import ImageNone from './images/no-image.jpg';
 import axios from 'axios';
 
 import { useState, useEffect } from 'react';
-import { Button, Row, Container, Dropdown, ButtonGroup } from 'react-bootstrap';
+import { Row, Container } from 'react-bootstrap';
 import { AppointmentCard } from './components/AppointmentCard';
+import { AppointmentRequestsHeader } from './components/AppointmentRequestsHeader.jsx';
 import { requestStatuses } from './components/constants';
-// future enhancement:
-// add toggle button to view requests in table with sorting (more compact view)
 
-// export const Context = createContext({
-//     appointmentChangeRequests: [],
-//     setData: () => {},
-// });
+// future enhancements:
+// add toggle button to view requests in table with sorting (more compact view)
+// loading progress indicator while getting data
+// pretty message when filtering and no results
+
+const API_URL = import.meta.env.DEV ? '/api' : 'https://petdeskapi2.azurewebsites.net/api';
 
 export function App() {
     const petImages = [ImageLila, ImageMushka, ImageEva];
-
-    const sortOptions = [
-        'Date Ascending',
-        'Date Descending',
-        'Appointment Type Ascending',
-        'Appointment Type Descending',
-    ];
     const [appointmentChangeRequests, setData] = useState([]);
     const [selectedFilter, setSelectedFilter] = useState(-1);
 
-    function filterChange(newFilter) {
-        setSelectedFilter(newFilter);
-        setData([...appointmentChangeRequests]);
+    function saveChanges(request) {
+        axios
+            .put(API_URL + '/updateappointmentchangerequest/' + request.appointmentId, {
+                status: request.status,
+                requestedDateTimeOffset: request.requestedDateTimeOffset,
+            })
+            .then((response) => console.log(response))
+            .catch((error) => console.log(error));
     }
 
     function getFilteredData() {
@@ -45,45 +44,19 @@ export function App() {
         return appointmentChangeRequests;
     }
 
-    function sortChange(eventKey) {
-        if (eventKey == 0) {
-            setData(
-                [...appointmentChangeRequests].sort(
-                    (obj1, obj2) => new Date(obj1.requestedDateTimeOffset) - new Date(obj2.requestedDateTimeOffset)
-                )
-            );
-        }
-        if (eventKey == 1) {
-            setData(
-                [...appointmentChangeRequests].sort(
-                    (obj1, obj2) => new Date(obj2.requestedDateTimeOffset) - new Date(obj1.requestedDateTimeOffset)
-                )
-            );
-        }
-        if (eventKey == 2) {
-            setData(
-                [...appointmentChangeRequests].sort((obj1, obj2) =>
-                    obj1.appointmentType > obj2.appointmentType ? 1 : -1
-                )
-            );
-        }
-        if (eventKey == 3) {
-            setData(
-                [...appointmentChangeRequests].sort((obj1, obj2) =>
-                    obj1.appointmentType > obj2.appointmentType ? -1 : 1
-                )
-            );
-        }
-    }
-
     useEffect(() => {
         axios
-            .get('https://petdeskapi2.azurewebsites.net/api/appointmentchangerequests')
+            .get(API_URL + '/appointmentchangerequests')
             .then(({ data }) => {
                 setData(
                     data.map((request, index) => {
                         const image = index <= 2 ? petImages[index] : ImageNone;
-                        return { ...request, status: requestStatuses[0], image: image, newAppointmentDate: new Date() };
+                        return {
+                            ...request,
+                            status: request.status || requestStatuses[0],
+                            image: image,
+                            newAppointmentDate: new Date(),
+                        };
                     })
                 );
             })
@@ -100,40 +73,23 @@ export function App() {
                     <h3>PetDesk Appointment Change Requests</h3>
                 </Row>
                 <Row className="mt-3 d-flex justify-content-center">
-                    <Dropdown className="AppointmentRequestsSort" onSelect={(eventKey) => sortChange(eventKey)}>
-                        <Dropdown.Toggle variant="primary">Sort By</Dropdown.Toggle>
-
-                        <Dropdown.Menu>
-                            {sortOptions.map((sort, index) => (
-                                <Dropdown.Item key={index} eventKey={index}>
-                                    {sort}
-                                </Dropdown.Item>
-                            ))}
-                        </Dropdown.Menu>
-                    </Dropdown>
-
-                    <ButtonGroup className="AppointmentRequestsFilter">
-                        <Button variant="primary" active={selectedFilter == -1} onClick={() => filterChange(-1)}>
-                            All
-                        </Button>
-                        {requestStatuses.map((status, index) => (
-                            <Button variant="primary" key={index} onClick={() => filterChange(index)}>
-                                {status}
-                            </Button>
-                        ))}
-                    </ButtonGroup>
+                    <AppointmentRequestsHeader
+                        appointmentChangeRequests={appointmentChangeRequests}
+                        setData={setData}
+                        selectedFilter={selectedFilter}
+                        setSelectedFilter={setSelectedFilter}
+                    />
                 </Row>
                 <Row className="mt-3 d-flex justify-content-center">
-                    {/* <Context.Provider value={{ appointmentChangeRequests, setData, requestStatuses }}> */}
                     {getFilteredData().map((request) => (
                         <AppointmentCard
                             key={request.appointmentId}
                             request={request}
                             appointmentChangeRequests={appointmentChangeRequests}
                             setData={setData}
+                            saveChanges={saveChanges}
                         />
                     ))}
-                    {/* </Context.Provider> */}
                 </Row>
             </Container>
         </>
