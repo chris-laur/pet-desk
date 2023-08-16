@@ -61,3 +61,8 @@
 .AppointmentCardInvalid {
     color: red;
 }
+
+.AppointmentCardStatus {
+    color: #0bc98c;
+    font-weight: bold;
+}

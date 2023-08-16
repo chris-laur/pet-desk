@@ -120,6 +120,17 @@ export function AppointmentCard({ request, appointmentChangeRequests, setData })
                             Update
                         </Button>
                     </ButtonToolbar>
+                    <span
+                        className={
+                            request.status != requestStatuses[0] ? 'AppointmentCardStatus' : 'AppointmentCardHidden'
+                        }
+                    >
+                        <FontAwesomeIcon
+                            icon={faCheck}
+                            className={request.status == requestStatuses[1] ? '' : 'AppointmentCardHidden'}
+                        />{' '}
+                        {request.status == requestStatuses[1] ? 'Confirmed' : 'Updated'}
+                    </span>
                 </Card.Footer>
             </Card>
         </>
