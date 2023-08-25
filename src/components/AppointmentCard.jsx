@@ -7,7 +7,9 @@ import 'react-clock/dist/Clock.css';
 import { Button, Card, ButtonToolbar } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
-import { DateTimePicker } from 'react-datetime-picker';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
 import { requestStatuses } from './constants';
 import { saveAppointmentChangeRequestData } from '../services/data';
 
@@ -15,24 +17,6 @@ export function AppointmentCard({ request, appointmentChangeRequests, setData })
     function setNewAppointmentDate(selectedDate, request) {
         request.newAppointmentDate = selectedDate;
         setData([...appointmentChangeRequests]);
-    }
-
-    function getPetDetails(pet) {
-        const details = [];
-
-        if (pet) {
-            if (pet.firstName) {
-                details.push(pet.firstName);
-            }
-            if (pet.species) {
-                details.push(pet.species);
-            }
-            if (pet.breed) {
-                details.push(pet.breed);
-            }
-        }
-
-        return details.join(', ');
     }
 
     function saveChanges(requestToUpdate) {
@@ -71,18 +55,30 @@ export function AppointmentCard({ request, appointmentChangeRequests, setData })
             >
                 <Card.Img className="AppointmentCardImage" variant="top" src={request.image} />
                 <Card.Body>
-                    <Card.Title>
+                    <Card.Title className="AppointmentCardTitle">
                         {request.user?.firstName} {request.user?.lastName}
                     </Card.Title>
-                    <Card.Text>
-                        {getPetDetails(request.animal)}
+                    <Card.Text className="AppointmentCardText">
+                        <span className="AppointmentCardLabel">Pet: </span>
+                        {request.animal.firstName}
                         <br></br>
+
+                        <span className="AppointmentCardLabel">Species: </span>
+                        {request.animal.species}
+                        <br></br>
+
+                        <span className="AppointmentCardLabel">Breed: </span>
+                        {request.animal.breed}
+                        <br></br>
+
+                        <span className="AppointmentCardLabel">Type: </span>
                         {request.appointmentType}
                         <br></br>
+
+                        <span className="AppointmentCardLabel">Date: </span>
                         <span
                             className={
-                                'AppointmentCardRequestDate' +
-                                (!isValidRequestDate(request.requestedDateTimeOffset) ? ' AppointmentCardInvalid' : '')
+                                !isValidRequestDate(request.requestedDateTimeOffset) ? ' AppointmentCardInvalid' : ''
                             }
                         >
                             {new Date(Date.parse(request.requestedDateTimeOffset)).toLocaleString()}
@@ -94,25 +90,28 @@ export function AppointmentCard({ request, appointmentChangeRequests, setData })
                         <Button
                             variant="primary"
                             className={
-                                isValidRequestDate(request.requestedDateTimeOffset)
+                                'AppointmentCardConfirm ' +
+                                (isValidRequestDate(request.requestedDateTimeOffset)
                                     ? 'AppointmentCardButton'
-                                    : 'AppointmentCardHidden'
+                                    : 'AppointmentCardHidden')
                             }
                             onClick={() => confirmRequest(request)}
                             title="Confirm Request"
                         >
                             <FontAwesomeIcon icon={faCheck} /> Confirm
                         </Button>
-                        <DateTimePicker
-                            calendarIcon={null}
-                            clearIcon={null}
-                            minDate={new Date()}
-                            value={request.newAppointmentDate}
-                            disableClock={true}
-                            onChange={(selectedDate) => setNewAppointmentDate(selectedDate, request)}
-                            className="AppointmentCardDateTimePicker"
-                        />
+
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <MobileDateTimePicker
+                                label="Select New Date"
+                                disablePast={true}
+                                format="MM/DD/YY h:mm a"
+                                onAccept={(value) => setNewAppointmentDate(value, request)}
+                            />
+                        </LocalizationProvider>
+
                         <Button
+                            className="AppointmentCardUpdate"
                             variant="primary"
                             onClick={() => updateRequest(request)}
                             title="Update Appointment Date"

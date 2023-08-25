@@ -1,6 +1,6 @@
 .AppointmentCard {
-    width: 26rem;
-    height: 24rem;
+    width: 24rem;
+    height: 26rem;
     align-items: center;
     padding-top: 10px;
     border-width: 2px;
@@ -18,22 +18,12 @@
     border-color: #dcdcdc;
 }
 
-.AppointmentCardDateTimePicker {
-    color: #000;
-    background-color: #fff;
-    margin-left: 4px;
-    margin-right: 4px;
-    width: 200px;
-}
-
-.AppointmentCardDateTimePicker > div {
-    border-radius: 6px;
-}
-
 .AppointmentCardFooter {
     border: none;
     background: none;
     flex-wrap: nowrap;
+    padding-left: 6px;
+    padding-right: 6px;
 }
 
 .AppointmentCardFooter > div {
@@ -42,8 +32,8 @@
 
 .AppointmentCardImage {
     border-radius: 50%;
-    width: 160px;
-    height: 160px;
+    width: 140px;
+    height: 140px;
 }
 
 .AppointmentCardButton {
@@ -54,10 +44,6 @@
     display: none;
 }
 
-.AppointmentCardRequestDate {
-    font-weight: bold;
-}
-
 .AppointmentCardInvalid {
     color: red;
 }
@@ -65,4 +51,24 @@
 .AppointmentCardStatus {
     color: #0bc98c;
     font-weight: bold;
+}
+
+.AppointmentCardLabel {
+    font-weight: bold;
+}
+
+.AppointmentCardText {
+    text-align: left;
+}
+
+.AppointmentCardTitle {
+    color: #08a9c6;
+}
+
+.AppointmentCardConfirm {
+    margin-right: 6px;
+}
+
+.AppointmentCardUpdate {
+    margin-left: 6px;
 }
