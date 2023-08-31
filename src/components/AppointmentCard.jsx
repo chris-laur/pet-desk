@@ -60,25 +60,31 @@ export function AppointmentCard({ request, appointmentChangeRequests, setData })
                     </Card.Title>
                     <Card.Text className="AppointmentCardText">
                         <span className="AppointmentCardLabel">Pet: </span>
-                        {request.animal.firstName}
+                        <span className="AppointmentCardText" title={request.animal.firstName}>
+                            {request.animal.firstName}
+                        </span>
                         <br></br>
-
                         <span className="AppointmentCardLabel">Species: </span>
-                        {request.animal.species}
+                        <span className="AppointmentCardText" title={request.animal.species}>
+                            {request.animal.species}
+                        </span>
                         <br></br>
-
                         <span className="AppointmentCardLabel">Breed: </span>
-                        {request.animal.breed}
+                        <span className="AppointmentCardText" title={request.animal.breed}>
+                            {request.animal.breed}
+                        </span>
                         <br></br>
-
                         <span className="AppointmentCardLabel">Type: </span>
-                        {request.appointmentType}
+                        <span className="AppointmentCardText" title={request.appointmentType}>
+                            {request.appointmentType}
+                        </span>
                         <br></br>
-
                         <span className="AppointmentCardLabel">Date: </span>
                         <span
+                            title={new Date(Date.parse(request.requestedDateTimeOffset)).toLocaleString()}
                             className={
-                                !isValidRequestDate(request.requestedDateTimeOffset) ? ' AppointmentCardInvalid' : ''
+                                'AppointmentCardText' +
+                                (!isValidRequestDate(request.requestedDateTimeOffset) ? ' AppointmentCardInvalid' : '')
                             }
                         >
                             {new Date(Date.parse(request.requestedDateTimeOffset)).toLocaleString()}
